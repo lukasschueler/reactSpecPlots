@@ -1,54 +1,12 @@
 import React, {PureComponent} from 'react'
-import {Line, Scatter} from 'react-chartjs-2'
+import {/*Line,*/ Scatter} from 'react-chartjs-2'
 
 var chartData;
 var chartOptions;
                 //PureComponent
 class Chart extends PureComponent {
 
-
-    chartRef = React.createRef();
-    
-    componentDidMount() {
-        const myChartRef = this.chartRef.current.getContext("2d");
-        
-        new Chart(myChartRef, {
-            type: "scatter",
-            data: {
-                //Bring in data
-                labels: [],
-                datasets: [
-                ]
-            },
-            options: {
-                //Customize chart options
-            }
-        });
-    }
-    render() {
-        return (
-            <div className={graphContainer}>
-                <canvas
-                    id="myChart"
-                    ref={this.chartRef}
-                />
-            </div>
-        )
-    }
-
-
-
-
-
-    // ---------------------------------
-
-    constructor(props) {
-        super(props);
-    
-        this.chartRef = React.createRef();
-      }
-
-    //Even working?                        
+                        
     static defaultProps = {
         displayTitle:true,
         displayLegend: true,

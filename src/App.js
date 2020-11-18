@@ -1,6 +1,4 @@
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 // import CustomButton from "./components/Custombutton"
 import Chart from "./components/Chart"
@@ -33,31 +31,25 @@ class App extends Component {
     }
   }
 
-
-
-  const uploadDataSet = (event) => {
-
-    const fileList = event.target.files;
-    readFile(fileList[0])
-  }
-
-
-  let readFile(file) {
+  readFile = (file) => {
     const reader = new FileReader();
-
     reader.addEventListener('load', (event) => {
-      uploadData(event.target.result, file.name);
+      this.uploadData(event.target.result, file.name);
     });
 
+
+    // const uploadDataSet = (event) => {
+    //   const fileList = event.target.files;
+    //   this.readFile(fileList[0])
+    // }
     reader.readAsText(file);
   }
 
-  const uploadData = (content, name) => {
-
+  uploadData = (content, name) => {
     axios.post("/uploadData", {
       content
     }).then(response => {
-      addPlot(response.data, {
+      this.addPlot(response.data, {
         name
       })
     })
@@ -94,21 +86,23 @@ class App extends Component {
   }
 
 
-  const dropArea = document.getElementById('chartDiv');
+  //TODO:   Event-Listener : https://stackoverflow.com/questions/55262596/using-useeffect-with-event-listeners
+  //                         https://stackoverflow.com/questions/36180414/reactjs-add-custom-event-listener-to-component
 
-  dropArea.addEventListener('dragover', (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    // Style the drag-and-drop as a "copy file" operation.
-    event.dataTransfer.dropEffect = 'copy';
-  });
+  // dropArea.addEventListener('dragover', (event) => {
+  //   const dropArea = document.getElementById('chartDiv');
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  //   // Style the drag-and-drop as a "copy file" operation.
+  //   event.dataTransfer.dropEffect = 'copy';
+  // });
 
-  dropArea.addEventListener('drop', (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    const fileList = event.dataTransfer.files;
-    readFile(fileList[0])
-  });
+  // dropArea.addEventListener('drop', (event) => {
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  //   const fileList = event.dataTransfer.files;
+  //   readFile(fileList[0])
+  // });
 
 
 
@@ -198,12 +192,12 @@ class App extends Component {
       }
     })
   }
-                                                                        
-render() {
+
+  render() {
     return (
       <div className="App" position="relative">
         <h1>Let's work here you fucker</h1>
-        <div className = "chartDiv" position="absolute" align="center">
+        <div className="chartDiv" position="absolute" align="center">
           <Chart
             chartData={this.state.chartData}
             chartOptions={this.state.chartOptions}
@@ -215,8 +209,8 @@ render() {
           <Inputtag changer={this.makeColourGradient} content="Colour" ></Inputtag>
           <Inputtag changer={this.titleChangedHandler} content="X-Axis" ></Inputtag>
           <Inputtag changer={this.titleChangedHandler} content="Y-Axis" ></Inputtag>
-          <input type="file" id="fileSelector" accept=".txt, .csv" onChange = {this.uploadDataSet}></input>
-          <button onClick = {this.loadFirstSet} > Load data</button>
+          <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.uploadDataSet}></input>
+          <button onClick={this.loadFirstSet} > Load data</button>
 
         </div>
 
@@ -224,7 +218,6 @@ render() {
     );
   };
 }
-  
 
-  export default App;
-  
+
+export default App;
