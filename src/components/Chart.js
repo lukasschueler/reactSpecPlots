@@ -6,71 +6,63 @@ var chartOptions;
                 //PureComponent
 class Chart extends PureComponent {
 
+    chartRef = React.createRef();
 
-    // chartRef = React.createRef();
-    
-    // componentDidMount() {
+    componentDidMount() {
+        const myChartRef = this.chartRef.current.getContext("2d");
 
-    //     chartData = this.props.chartData
-    //     chartOptions  = this.props.chartOptions
+        new Chart(myChartRef, {
+            type: "scatter",
+            data: {
 
-    //     const myChartRef = this.chartRef.current.getContext("2d");
-        
-    //     new Chart(myChartRef, {
-    //         type: "scatter",
-    //         data: {
-  
-    //         },
-    //         options: {
-    //             //Customize chart options
-    //         }
-    //     });
-    // }
-    // render() {
-    //     return (
-    //         <div className={graphContainer}>
-    //             <canvas
-    //                 id="myChart"
-    //                 ref={this.chartRef}
-    //             />
-    //         </div>
-    //     )
-    // }
-
-
-
-
-
-    // ---------------------------------
-
-    constructor(props) {
-        super(props);
-    
-        this.chartRef = React.createRef();
-      }
-
-    //Even working?                        
-    static defaultProps = {
-        displayTitle:true,
-        displayLegend: true,
-        legendPosition:'right',
+            },
+            options: {}
+        });
     }
-            
-            
     render() {
-        chartData = this.props.chartData
-        chartOptions  = this.props.chartOptions
         return (
-            <div style = {{ postion: "absolute", width : "770px", height : "400px" }} className ="chart" >
-                <Scatter
+             <div className={graphContainer}>
+                <canvas
+                    id="myChart"
                     ref={this.chartRef}
-                    data = {chartData}
-                    options = {chartOptions}
-                /> 
+               />
             </div>
         )
     }
+    
 }
 
-
 export default Chart;
+    
+    
+    
+    // ---------------------------------
+    
+    // constructor(props) {
+        //     super(props);
+        
+        //     this.chartRef = React.createRef();
+        // }
+        
+        // //Even working?                        
+        // static defaultProps = {
+            //     displayTitle:true,
+            //     displayLegend: true,
+            //     legendPosition:'right',
+            // }
+            
+            
+            // render() {
+                
+                //     chartData = this.props.chartData
+                //     chartOptions  = this.props.chartOptions
+                //     return (
+                    //         <div style = {{ postion: "absolute", width : "770px", height : "400px" }} className ="chart" >
+                    //                 <Scatter
+                    //                     ref={this.chartRef}
+                    //                     data = {chartData}
+                    //                     options = {chartOptions}
+                    //                 /> 
+                    //             </div>
+                    //         )
+                    //     }

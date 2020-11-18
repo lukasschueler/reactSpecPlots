@@ -79,11 +79,11 @@ class App extends Component {
   }
 
 
-  // uploadDataSet = (event) => {
+  uploadDataSet = (event) => {
 
-  //   const fileList = event.target.files;
-  //   this.readFile(fileList[0])
-  // }
+    const fileList = event.target.files;
+    this.readFile(fileList[0])
+  }
 
 
   uploadData = (content, name) => {
@@ -94,34 +94,12 @@ class App extends Component {
         name
       })
     })
+  }
   
 
 
 
     // dropArea = document.getElementById('chartDiv');
-
-    // dropArea.addEventListener('dragover', (event) => {
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    //   // Style the drag-and-drop as a "copy file" operation.
-    //   event.dataTransfer.dropEffect = 'copy';
-    // });
-
-    this.setState({
-      chartData: {
-        datasets: [{
-          label: values.name,
-          data: data
-        }]
-      },
-      chartOptions: {
-        title: {
-          display: true,
-          text: 'You made it!'
-        }
-      }
-    })
-  }
 
 
   //TODO:   Event-Listener : https://stackoverflow.com/questions/55262596/using-useeffect-with-event-listeners
