@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Line, Scatter} from 'react-chartjs-2'
+import {Scatter} from 'react-chartjs-2'
 
 var chartData;
 var chartOptions;
@@ -7,34 +7,35 @@ var chartOptions;
 class Chart extends PureComponent {
 
 
-    chartRef = React.createRef();
+    // chartRef = React.createRef();
     
-    componentDidMount() {
-        const myChartRef = this.chartRef.current.getContext("2d");
+    // componentDidMount() {
+
+    //     chartData = this.props.chartData
+    //     chartOptions  = this.props.chartOptions
+
+    //     const myChartRef = this.chartRef.current.getContext("2d");
         
-        new Chart(myChartRef, {
-            type: "scatter",
-            data: {
-                //Bring in data
-                labels: [],
-                datasets: [
-                ]
-            },
-            options: {
-                //Customize chart options
-            }
-        });
-    }
-    render() {
-        return (
-            <div className={graphContainer}>
-                <canvas
-                    id="myChart"
-                    ref={this.chartRef}
-                />
-            </div>
-        )
-    }
+    //     new Chart(myChartRef, {
+    //         type: "scatter",
+    //         data: {
+  
+    //         },
+    //         options: {
+    //             //Customize chart options
+    //         }
+    //     });
+    // }
+    // render() {
+    //     return (
+    //         <div className={graphContainer}>
+    //             <canvas
+    //                 id="myChart"
+    //                 ref={this.chartRef}
+    //             />
+    //         </div>
+    //     )
+    // }
 
 
 
@@ -59,13 +60,10 @@ class Chart extends PureComponent {
     render() {
         chartData = this.props.chartData
         chartOptions  = this.props.chartOptions
-        // console.log("Rendering in Chart.js")
-        // console.log("ChartData: " , chartData);
-        // console.log("ChartOptions: " , chartOptions)
-        // console.log("---------------------------------------------------------")
         return (
             <div style = {{ postion: "absolute", width : "770px", height : "400px" }} className ="chart" >
                 <Scatter
+                    ref={this.chartRef}
                     data = {chartData}
                     options = {chartOptions}
                 /> 

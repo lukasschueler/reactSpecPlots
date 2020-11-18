@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(1, '/home/lukas/hiwi/hiwiProject/back')
+sys.path.insert(1, '/home/lukas/hiwi/project/reactplots/back')
 from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler
 import socketserver
 import pickle
@@ -7,7 +7,7 @@ import json
 import cgi
 import time
 import os
-# from tools import Tools
+from tools import Tools
 
 
 class Server(SimpleHTTPRequestHandler):
@@ -40,10 +40,10 @@ class Server(SimpleHTTPRequestHandler):
             
             self._set_headers()
 
-            path = "short.txt"
+            path = "rotkohl.txt"
             if os.path.isfile(path):
                 with open(path, 'r') as base:
-                    print("-------------READINGFROMDATABASE------------>")
+                    print("-------------READINGFROMFILE------------>")
                     content = base.read()
                     data = Tools.processTXT(self,content)
                     
