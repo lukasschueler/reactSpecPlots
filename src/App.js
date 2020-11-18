@@ -1,6 +1,4 @@
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 // import CustomButton from "./components/Custombutton"
 import Chart from "./components/Chart"
@@ -10,7 +8,7 @@ import axios from 'axios';
 
 
 class App extends Component {
-  
+
   constructor() {
     super();
     this.state = {
@@ -19,74 +17,118 @@ class App extends Component {
         datasets: []
       },
       chartOptions: {}
-        }
-      }
-      
-      
-      
-      
-      addPlot = (content, values) => {
-     
-        let data = [];
-        for (let i = 0; i < content.length; i++) {
-          let tmp = {
-            x: content[i][0],
-            y: content[i][1]
-          }
-          data.push(tmp)
-        }
-        console.log("Länge: ", data.length)
-     
-     
-        this.setState({
-          chartData: {
-            datasets: [{
-              label: values.name,
-              data: data
-            }]
-          },
-          chartOptions: {
-            title: {
-              display: true,
-              text: 'You made it!'
-            }
-          }
-        })
-      }
-    
-    uploadData = (content, name) => {
-   
-      axios.post("/uploadData", {
-        content
-      }).then(response => {
-        this.addPlot(response.data, {
-          name
-        })
-      })
-   
     }
-    readFile = (file)  => {
-      const reader = new FileReader();
-    
+  }
+
+
+
+
+  addPlot = (content, values) => {
+
+    let data = [];
+    for (let i = 0; i < content.length; i++) {
+      let tmp = {
+        x: content[i][0],
+        y: content[i][1]
+      }
+      data.push(tmp)
+    }
+    console.log("Länge: ", data.length)
+
+
+    this.setState({
+      chartData: {
+        datasets: [{
+          label: values.name,
+          data: data
+        }]
+      },
+      chartOptions: {
+        title: {
+          display: true,
+          text: 'You made it!'
+        }
+      }
+    })
+  }
+
+  uploadData = (content, name) => {
+
+    axios.post("/uploadData", {
+      content
+    }).then(response => {
+      this.addPlot(response.data, {
+        name
+      })
+    })
+
+  }
+
+  readFile = (file) => {
+    const reader = new FileReader();
     reader.addEventListener('load', (event) => {
       this.uploadData(event.target.result, file.name);
     });
-    
+
+
+    // const uploadDataSet = (event) => {
+    //   const fileList = event.target.files;
+    //   this.readFile(fileList[0])
+    // }
     reader.readAsText(file);
   }
-  uploadDataSet = (event) => {
 
-   const fileList = event.target.files;
-   this.readFile(fileList[0])
- }
 
+  // uploadDataSet = (event) => {
+
+  //   const fileList = event.target.files;
+  //   this.readFile(fileList[0])
+  // }
+
+
+  uploadData = (content, name) => {
+    axios.post("/uploadData", {
+      content
+    }).then(response => {
+      this.addPlot(response.data, {
+        name
+      })
+    })
   
 
 
 
-  // dropArea = document.getElementById('chartDiv');
+    // dropArea = document.getElementById('chartDiv');
+
+    // dropArea.addEventListener('dragover', (event) => {
+    //   event.stopPropagation();
+    //   event.preventDefault();
+    //   // Style the drag-and-drop as a "copy file" operation.
+    //   event.dataTransfer.dropEffect = 'copy';
+    // });
+
+    this.setState({
+      chartData: {
+        datasets: [{
+          label: values.name,
+          data: data
+        }]
+      },
+      chartOptions: {
+        title: {
+          display: true,
+          text: 'You made it!'
+        }
+      }
+    })
+  }
+
+
+  //TODO:   Event-Listener : https://stackoverflow.com/questions/55262596/using-useeffect-with-event-listeners
+  //                         https://stackoverflow.com/questions/36180414/reactjs-add-custom-event-listener-to-component
 
   // dropArea.addEventListener('dragover', (event) => {
+  //   const dropArea = document.getElementById('chartDiv');
   //   event.stopPropagation();
   //   event.preventDefault();
   //   // Style the drag-and-drop as a "copy file" operation.
@@ -105,7 +147,7 @@ class App extends Component {
   makeColourGradient = (event) => {
     const canvas = this.refs.chartRef.chart_instance.chart.ctx
     // var ctx = document.getElementById(Chart.chartRef).current.getContext('2d');
-    console.log("CTX: " ,canvas)
+    console.log("CTX: ", canvas)
     // var ctx = document.getElementById('chart').getContext("2d");
     // var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
     // gradientStroke.addColorStop(0, "#80b6f4");
@@ -171,8 +213,6 @@ class App extends Component {
   }
 
 
-
-
   titleChangedHandler = (event) => {
     console.log(event.target)
     this.setState({
@@ -191,12 +231,13 @@ class App extends Component {
       }
     })
   }
-                                                                        
-render() {
-    return (
-      <div className="App" position="relative">
+
+
+      render() {
+                  return (
+                    <div className="App" position="relative">
         <h1>Let's work here you fucker</h1>
-        <div className = "chartDiv" position="absolute" align="center">
+        <div className="chartDiv" position="absolute" align="center">
           <Chart
             chartData={this.state.chartData}
             chartOptions={this.state.chartOptions}
@@ -208,8 +249,8 @@ render() {
           <Inputtag changer={this.makeColourGradient} content="Colour" ></Inputtag>
           <Inputtag changer={this.titleChangedHandler} content="X-Axis" ></Inputtag>
           <Inputtag changer={this.titleChangedHandler} content="Y-Axis" ></Inputtag>
-          <input type="file" id="fileSelector" accept=".txt, .csv" onChange = {this.uploadDataSet}></input>
-          <button onClick = {this.loadFirstSet} > Load data</button>
+          <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.uploadDataSet}></input>
+          <button onClick={this.loadFirstSet} > Load data</button>
 
           <button onClick = {this.makeColourGradient} > Linear Gradient</button>
 
@@ -218,8 +259,7 @@ render() {
       </div>
     );
   };
-}
-  
 
-  export default App;
-  
+}
+
+export default App;
