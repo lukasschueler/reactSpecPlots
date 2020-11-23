@@ -7,67 +7,86 @@ import Inputtag from "./components/Custominput"
 import axios from 'axios';
 
 
+let idNumber = 0;
+let idLiteral = "chart_0"
+
 class App extends Component {
+  //defaults:
+  //Legend onClick,onHover, onLeave
 
   constructor() {
     super();
+
     this.state = {
-      chartData: {
-        labels: [],
-        datasets: []
-      },
-      chartOptions: {}
+      datas:{},
+      datasetLabels:{},
+      fill:{},
+      legendDisplay:true,
+      legendText:"Some lovely plot",
+      legendPosition: "top",
+      titleDisplay:true,
+      titleText:"My beautiful Chart",
+      xAxisLabel:"",
+      yAxisLabel:""
+
     }
+  }
+
+  convertData = (data) => {
+    let result = [];
+    for (let i = 0; i < data.length; i++) {
+      let tmp = {
+        x: data[i][0],
+        y: data[i][1]
+      }
+      result.push(tmp)
+    }
+    return result;
+
   }
 
 
 
+  addPlot = (handover) => {
 
-  addPlot = (content, values) => {
+    let holdDatasets = this.state.datas;
+    let holdLabels = this.state.datasetLabels;
+    let holdFills = this.state.fill;
 
-    let data = [];
-    for (let i = 0; i < content.length; i++) {
-      let tmp = {
-        x: content[i][0],
-        y: content[i][1]
-      }
-      data.push(tmp)
-    }
-    console.log("Länge: ", data.length)
+    let data = this.convertData(handover)
+    let id = idLiteral.concat(idNumber.toString());
+
+    holdDatasets[id] = data;
+    holdFills[id] = false
+    holdLabels[id] = "";
 
 
     this.setState({
-      chartData: {
-        datasets: [{
-          label: values.name,
-          data: data
-        }]
-      },
-      chartOptions: {
-        title: {
-          display: true,
-          text: 'You made it!'
-        }
-      }
+      datas: holdDatasets,
+      datasetLabels: holdLabels,
+      fill: holdFills
     })
+
+    this.idNumber++;
+
   }
 
-  uploadData = (content, name) => {
+  uploadData = (content) => {
 
     axios.post("/uploadData", {
       content
     }).then(response => {
-      this.addPlot(response.data, {
-        name
-      })
+      this.addPlot(response.data)
     })
 
   }
 
+
+
   readFile = (file) => {
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
-      this.uploadData(event.target.result, file.name);
+      this.uploadData(event.target.result);
     });
 
 
@@ -79,27 +98,16 @@ class App extends Component {
   }
 
 
-  uploadDataSet = (event) => {
+  readInputFile = (event) => {
 
     const fileList = event.target.files;
     this.readFile(fileList[0])
   }
 
 
-  uploadData = (content, name) => {
-    axios.post("/uploadData", {
-      content
-    }).then(response => {
-      this.addPlot(response.data, {
-        name
-      })
-    })
-  }
-  
 
-
-
-    // dropArea = document.getElementById('chartDiv');
+  //TODO: Implemet droparea
+  // dropArea = document.getElementById('chartDiv');
 
 
   //TODO:   Event-Listener : https://stackoverflow.com/questions/55262596/using-useeffect-with-event-listeners
@@ -121,94 +129,45 @@ class App extends Component {
   // });
 
 
-
-  makeColourGradient = (event) => {
-    const canvas = this.refs.chartRef.chart_instance.chart.ctx
-    // var ctx = document.getElementById(Chart.chartRef).current.getContext('2d');
-    console.log("CTX: ", canvas)
-    // var ctx = document.getElementById('chart').getContext("2d");
-    // var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-    // gradientStroke.addColorStop(0, "#80b6f4");
-    // gradientStroke.addColorStop(0.2, "#94d973");
-    // gradientStroke.addColorStop(0.5, "#fad874");
-    // gradientStroke.addColorStop(1, "#f49080");
-
-
-    // this.setState({
-    //   chartData: {
-    //     labels: ["Jan", "Feb", "Mar"],
-    //     datasets: [{
-    //       label: event.target.value,
-    //       data: [2, 15, 23],
-    //       borderColor: gradientStroke,
-    //       pointBorderColor: gradientStroke,
-    //       pointBackgroundColor: gradientStroke,
-    //       pointHoverBackgroundColor: gradientStroke,
-    //       pointHoverBorderColor: gradientStroke
-    //     }]
-    //   },
-    //   chartOptions: {
-    //     title: {
-    //       display: true,
-    //       text: 'You made it!'
-    //     }
-    //   }
-    // })
-  }
-
   loadFirstSet = () => {
     axios.get("http://localhost:8008/getData").then(response => {
 
-
-      let content = response.data;
-      let data = [];
-      for (let i = 0; i < content.length; i++) {
-        let tmp = {
-          x: content[i][0],
-          y: content[i][1]
-        }
-        data.push(tmp)
-      }
-      console.log("Länge: ", data.length)
-
-
-      this.setState({
-        chartData: {
-          datasets: [{
-            label: "First load",
-            data: data
-          }]
-        },
-        chartOptions: {
-          title: {
-            display: true,
-            text: 'You made it!'
-          }
-        }
-      })
-
+      let handover = response.data;
+      this.addPlot(handover)
     });
   }
 
 
-  titleChangedHandler = (event) => {
-    console.log(event.target)
+
+  toggleGradient = (event) => {
     this.setState({
-      chartData: {
-        labels: ["Jan", "Feb", "Mar"],
-        datasets: [{
-          label: event.target.value,
-          data: [2, 15, 23]
-        }]
-      },
-      chartOptions: {
-        title: {
-          display: true,
-          text: 'You made it!'
-        }
-      }
+      
+    })
+
+  }
+
+
+  titleChangedHandler = (event) => {
+    this.setState({
+      titleText: event.target.value
     })
   }
+  legendChangedHandler = (event) => {
+    this.setState({
+      LegendText: event.target.value
+    })
+  }
+  xAxisChangedHandler = (event) => {
+    this.setState({
+      xAxisLabel: event.target.value
+    })
+  }
+  yAxisChangedHandler = (event) => {
+    this.setState({
+      yAxisLabel: event.target.value
+    })
+  }
+  
 
 
       render() {
@@ -217,20 +176,19 @@ class App extends Component {
         <h1>Let's work here you fucker</h1>
         <div className="chartDiv" position="absolute" align="center">
           <Chart
-            chartData={this.state.chartData}
-            chartOptions={this.state.chartOptions}
+            {...this.state}
           />
         </div>
         <div>
           <h2>Tools </h2>
-          <Inputtag changer={this.titleChangedHandler} content="Title" ></Inputtag>
-          <Inputtag changer={this.makeColourGradient} content="Colour" ></Inputtag>
-          <Inputtag changer={this.titleChangedHandler} content="X-Axis" ></Inputtag>
-          <Inputtag changer={this.titleChangedHandler} content="Y-Axis" ></Inputtag>
-          <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.uploadDataSet}></input>
-          <button onClick={this.loadFirstSet} > Load data</button>
+          <Inputtag changer={this.titleChangedHandler} label="Title" ></Inputtag>
+          <Inputtag changer={this.legendChangedHandler} label="Legend" ></Inputtag>
+          <Inputtag changer={this.xAxisChangedHandler} label="X-Axis" ></Inputtag>
+          <Inputtag changer={this.yAxisChangedHandler} label="Y-Axis" ></Inputtag>
+          <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.readInputFile}></input>
+          <button onClick={this.loadFirstSet}>Load data</button>
 
-          <button onClick = {this.makeColourGradient} > Linear Gradient</button>
+          <button onClick = {Chart.colourGradient} > Linear Gradient</button>
 
         </div>
 

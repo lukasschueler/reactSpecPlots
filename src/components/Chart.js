@@ -1,68 +1,145 @@
-import React, {PureComponent} from 'react'
-import {Scatter} from 'react-chartjs-2'
+import React from 'react'
+import {Line} from 'react-chartjs-2'
+import "chartjs-plugin-colorschemes"
 
-var chartData;
-var chartOptions;
-                //PureComponent
-class Chart extends PureComponent {
 
-    chartRef = React.createRef();
 
-    componentDidMount() {
-        const myChartRef = this.chartRef.current.getContext("2d");
+const Chart = (
+  { datas,
+    datasetLabels ,
+    fill ,
+    legendDisplay , 
+    legendText , 
+    legendPosition ,
+    titleDisplay ,
+    titleText ,
+    xAxisLabel ,
+    yAxisLabel }
+    ) => {
 
-        new Chart(myChartRef, {
-            type: "scatter",
-            data: {
+    this.chartReference = React.createRef();
 
-            },
-            options: {}
-        });
+    function rainbow (canvas) {
+        console.log("Called")
+        const ctx = canvas.getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(250,174,50,1)');   
+        gradient.addColorStop(1, 'rgba(250,174,50,0)');
+        
+        return gradient;      
     }
-    render() {
-        return (
-             <div className={graphContainer}>
-                <canvas
-                    id="myChart"
-                    ref={this.chartRef}
-               />
-            </div>
-        )
+
+
+    function buildData() {
+        console.log("Starting: ")
+        let datasets = [];
+        Object.keys(datas).forEach(function(key) {
+
+            let tmp = {
+                id: key,
+                data: datas[key],
+                label: datasetLabels[key],
+                fill: fill[key],
+                pointRadius: 0
+            }
+            datasets.push(tmp)
+        });
+
+        let output = {
+            datasets: datasets
+        }
+        console.log("Output: ", output )
+        return output;
+    } 
+
+
+
+
+    // -----------------Different Color Supplies--------------------------
+    // var colors = [];
+    // while (colors.length < 100) {
+    //     do {
+    //         var color = Math.floor((Math.random()*1000000)+1);
+    //     } while (colors.indexOf(color) >= 0);
+    //     colors.push("#" + ("000000" + color.toString(16)).slice(-6));
+    // }
+
+
+    // var colorArray = [
+    //     '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+	// 	  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+	// 	  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+	// 	  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+	// 	  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+	// 	  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+	// 	  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+	// 	  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+	// 	  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+    //       '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
+    //     ];
+
+    // ---------------------------------------------------------------------------
+
+    let chartData = buildData()
+
+    let chartOptions  = {
+        title: {
+          display: titleDisplay,
+          text: titleText
+        },
+        legend: {
+            display: legendDisplay,
+            text: legendText,
+            position: legendPosition
+        },
+        scales: {
+            xAxes: [{
+                type: "linear",
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: xAxisLabel                
+                }
+            }],
+
+            yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: yAxisLabel
+                }
+              }]
+        },
+        elements: {
+            line: {
+                tension: 0 // disables bezier curves
+            }
+        },
+        plugins: {
+
+            colorschemes: {
+      
+              scheme: 'brewer.Spectral7'
+      
+            }
+      
+          }
     }
     
+    
+    
+
+    
+    return (
+        <div style = {{ postion: "absolute", width : "770px", height : "400px" }} className ="chart" >
+            <Line
+                ref={this.chartReference}
+                data = {chartData}
+                options = {chartOptions}
+            /> 
+        </div>
+    )
 }
 
 export default Chart;
+
     
-    
-    
-    // ---------------------------------
-    
-    // constructor(props) {
-        //     super(props);
-        
-        //     this.chartRef = React.createRef();
-        // }
-        
-        // //Even working?                        
-        // static defaultProps = {
-            //     displayTitle:true,
-            //     displayLegend: true,
-            //     legendPosition:'right',
-            // }
-            
-            
-            // render() {
-                
-                //     chartData = this.props.chartData
-                //     chartOptions  = this.props.chartOptions
-                //     return (
-                    //         <div style = {{ postion: "absolute", width : "770px", height : "400px" }} className ="chart" >
-                    //                 <Scatter
-                    //                     ref={this.chartRef}
-                    //                     data = {chartData}
-                    //                     options = {chartOptions}
-                    //                 /> 
-                    //             </div>
-                    //         )
-                    //     }

@@ -40,7 +40,7 @@ class Server(SimpleHTTPRequestHandler):
             
             self._set_headers()
 
-            path = "rotkohl.txt"
+            path = "short.txt"
             if os.path.isfile(path):
                 with open(path, 'r') as base:
                     print("-------------READINGFROMFILE------------>")

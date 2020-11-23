@@ -1,9 +1,15 @@
 import React from 'react';
+import { TextField } from '@material-ui/core';
 
 
 const custominput = (props) => {
     return (
-        <input className = "Changer" type="text" value = {props.content} onChange = {props.changer} />
+        <TextField 
+        className = "TextInput" 
+        variant = "filled"
+        label = {props.label}
+        onChange = {props.changer}
+        />
     )
 }
 
