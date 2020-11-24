@@ -8,13 +8,14 @@ var buttonStyle = {
   };
 
 
-const CustomButton = () => {
+const CustomButton = (props) => {
+
+
+    // style = {buttonStyle}>
     return  (
-    <Button
-        className = 'CustomButton'
-        style = {buttonStyle}>
+    <button onClick = {props.changer}>
         You can click here!
-    </Button>
+    </button>
     )};
 
 export default CustomButton;

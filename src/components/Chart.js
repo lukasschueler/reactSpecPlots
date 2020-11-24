@@ -1,21 +1,82 @@
 import React from 'react'
 import {Line} from 'react-chartjs-2'
 import "chartjs-plugin-colorschemes"
+import "chartjs-plugin-zoom"
 
 
 
 const Chart = (
-  { datas,
-    datasetLabels ,
-    fill ,
-    legendDisplay , 
-    legendText , 
-    legendPosition ,
+   {  datas,
+        datasetLabels ,
+        fill ,
+        legendDisplay , 
+        legendText , 
+        legendPosition ,
     titleDisplay ,
     titleText ,
     xAxisLabel ,
-    yAxisLabel }
+    yAxisLabel,
+    borderColor , 
+    }, receiveChange
+
     ) => {
+        // console.log("Signal: ", receiveChange)
+        
+        let chartData = buildData()
+        
+        let chartOptions  = {
+            title: {
+              display: titleDisplay,
+              text: titleText
+            },
+            legend: {
+                display: legendDisplay,
+                text: legendText,
+                position: legendPosition,
+                // onClick: handleLegendClick
+            },
+            scales: {
+                xAxes: [{
+                    type: "linear",
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: xAxisLabel                
+                    }
+                }],
+        
+                yAxes: [{
+                    scaleLabel: {
+                      display: true,
+                      labelString: yAxisLabel
+                    }
+                  }]
+            },
+            elements: {
+                line: {
+                    tension: 0 // disables bezier curves
+                }
+            },
+            plugins: {
+                colorschemes: {
+                  scheme: 'brewer.Spectral7'
+                },
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy'
+                    },
+                    zoom: {
+                        enabled: true,
+                        // drag: true,
+                        mode: 'xy',
+                        speed: 0.08,
+                    }
+                }
+              },
+        }
+        
+
 
     this.chartReference = React.createRef();
 
@@ -31,7 +92,6 @@ const Chart = (
 
 
     function buildData() {
-        console.log("Starting: ")
         let datasets = [];
         Object.keys(datas).forEach(function(key) {
 
@@ -40,7 +100,8 @@ const Chart = (
                 data: datas[key],
                 label: datasetLabels[key],
                 fill: fill[key],
-                pointRadius: 0
+                pointRadius: 0,
+                borderColor: borderColor[key]
             }
             datasets.push(tmp)
         });
@@ -48,10 +109,39 @@ const Chart = (
         let output = {
             datasets: datasets
         }
-        console.log("Output: ", output )
         return output;
     } 
 
+    // function handleLegendClick(e, legendItem, legend){
+    //    let identifier =  getKeyByValue(datasetLabels, legendItem.text)
+
+    //    receiveChange("bordercolor", "black", identifier)
+
+    // //    const result = chartData.datasets.find( ({ id }) => id === identifier );
+    // //    result.borderColor = "black"
+    // //    result.fill = true;
+    // //    result.label = "Selected"
+
+
+    //     console.log("Dataset: " , chartData)
+
+    //    //Add to selection
+    //    //Change visuals acoordingly 
+
+
+    // }
+
+    function handleLegendHover(){
+
+    }
+
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+      }
+      
+      
+
+      
 
 
 
@@ -80,50 +170,6 @@ const Chart = (
 
     // ---------------------------------------------------------------------------
 
-    let chartData = buildData()
-
-    let chartOptions  = {
-        title: {
-          display: titleDisplay,
-          text: titleText
-        },
-        legend: {
-            display: legendDisplay,
-            text: legendText,
-            position: legendPosition
-        },
-        scales: {
-            xAxes: [{
-                type: "linear",
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: xAxisLabel                
-                }
-            }],
-
-            yAxes: [{
-                scaleLabel: {
-                  display: true,
-                  labelString: yAxisLabel
-                }
-              }]
-        },
-        elements: {
-            line: {
-                tension: 0 // disables bezier curves
-            }
-        },
-        plugins: {
-
-            colorschemes: {
-      
-              scheme: 'brewer.Spectral7'
-      
-            }
-      
-          }
-    }
     
     
     

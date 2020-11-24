@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-// import CustomButton from "./components/Custombutton"
+import CustomButton from "./components/Custombutton"
 import Chart from "./components/Chart"
 import Inputtag from "./components/Custominput"
 // import { Button } from '@material-ui/core';
@@ -27,9 +27,11 @@ class App extends Component {
       titleDisplay:true,
       titleText:"My beautiful Chart",
       xAxisLabel:"",
-      yAxisLabel:""
+      yAxisLabel:"",
+      borderColor: {}
 
     }
+    this.receivedChange = this.receivedChange.bind(this);
   }
 
   convertData = (data) => {
@@ -45,20 +47,30 @@ class App extends Component {
 
   }
 
+  keyProvider = () => {
+    
+    return idLiteral.concat(idNumber.toString());
 
-
-  addPlot = (handover) => {
+  }
+  
+  
+  addPlot = (handover, fileName) => {
+    
+    console.log("fileName: ", fileName)
 
     let holdDatasets = this.state.datas;
     let holdLabels = this.state.datasetLabels;
     let holdFills = this.state.fill;
-
+    let holdBorderColors = this.state.borderColor;
+    
     let data = this.convertData(handover)
-    let id = idLiteral.concat(idNumber.toString());
+    let id = this.keyProvider()
+    idNumber++;
 
     holdDatasets[id] = data;
     holdFills[id] = false
-    holdLabels[id] = "";
+    holdLabels[id] = fileName;
+    holdBorderColors[id] = undefined
 
 
     this.setState({
@@ -67,16 +79,16 @@ class App extends Component {
       fill: holdFills
     })
 
-    this.idNumber++;
+    console.log("Now state contains: ", this.state.datas)
 
   }
 
-  uploadData = (content) => {
+  uploadData = (content, fileName) => {
 
     axios.post("/uploadData", {
       content
     }).then(response => {
-      this.addPlot(response.data)
+      this.addPlot(response.data, fileName)
     })
 
   }
@@ -86,14 +98,9 @@ class App extends Component {
   readFile = (file) => {
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
-      this.uploadData(event.target.result);
+      this.uploadData(event.target.result, file.name);
     });
 
-
-    // const uploadDataSet = (event) => {
-    //   const fileList = event.target.files;
-    //   this.readFile(fileList[0])
-    // }
     reader.readAsText(file);
   }
 
@@ -106,35 +113,40 @@ class App extends Component {
 
 
 
-  //TODO: Implemet droparea
-  // dropArea = document.getElementById('chartDiv');
-
-
+  
+  
   //TODO:   Event-Listener : https://stackoverflow.com/questions/55262596/using-useeffect-with-event-listeners
   //                         https://stackoverflow.com/questions/36180414/reactjs-add-custom-event-listener-to-component
+  
+  // TODO: Implemet droparea
 
-  // dropArea.addEventListener('dragover', (event) => {
-  //   const dropArea = document.getElementById('chartDiv');
-  //   event.stopPropagation();
-  //   event.preventDefault();
-  //   // Style the drag-and-drop as a "copy file" operation.
-  //   event.dataTransfer.dropEffect = 'copy';
-  // });
+  componentDidMount() {
+    console.log("Mounted")
 
-  // dropArea.addEventListener('drop', (event) => {
-  //   event.stopPropagation();
-  //   event.preventDefault();
-  //   const fileList = event.dataTransfer.files;
-  //   readFile(fileList[0])
-  // });
-
-
-  loadFirstSet = () => {
-    axios.get("http://localhost:8008/getData").then(response => {
-
-      let handover = response.data;
-      this.addPlot(handover)
+   const dropArea = document.getElementsByClassName('chartDiv');
+    dropArea[0].addEventListener('dragover', (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      // Style the drag-and-drop as a "copy file" operation.
+      event.dataTransfer.dropEffect = 'copy';
     });
+  
+    dropArea[0].addEventListener('drop', (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const fileList = event.dataTransfer.files;
+      this.readFile(fileList[0])
+    });
+
+
+  }
+
+
+  receivedChange = (property, value, id) => {
+    console.log("Signal incoming")
+    this.setState({ 
+      [property[id]] : value
+    })
   }
 
 
@@ -177,6 +189,8 @@ class App extends Component {
         <div className="chartDiv" position="absolute" align="center">
           <Chart
             {...this.state}
+            receiveChange = {this.receiveChange}
+
           />
         </div>
         <div>
@@ -186,9 +200,8 @@ class App extends Component {
           <Inputtag changer={this.xAxisChangedHandler} label="X-Axis" ></Inputtag>
           <Inputtag changer={this.yAxisChangedHandler} label="Y-Axis" ></Inputtag>
           <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.readInputFile}></input>
-          <button onClick={this.loadFirstSet}>Load data</button>
 
-          <button onClick = {Chart.colourGradient} > Linear Gradient</button>
+          <CustomButton changer = {this.receiveChange} > Linear Gradient</CustomButton>
 
         </div>
 
