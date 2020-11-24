@@ -6,9 +6,10 @@ const custominput = (props) => {
     return (
         <TextField 
         className = "TextInput" 
-        variant = "filled"
+        variant = "outlined"
         label = {props.label}
         onChange = {props.changer}
+        color = "secondary"
         />
     )
 }

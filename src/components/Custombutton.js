@@ -13,9 +13,12 @@ const CustomButton = (props) => {
 
     // style = {buttonStyle}>
     return  (
-    <button onClick = {props.changer}>
-        You can click here!
-    </button>
+    <Button variant = "contained"  
+            color = "primary" 
+            size = "small" 
+            value = {props.value}
+            onClick = {props.changer}>
+    </Button>
     )};
 
 export default CustomButton;

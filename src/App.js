@@ -1,14 +1,31 @@
 import React, { Component } from 'react';
 import './App.css';
+import ButtonGroup from '@material-ui/core/Button' 
 import CustomButton from "./components/Custombutton"
 import Chart from "./components/Chart"
 import Inputtag from "./components/Custominput"
 // import { Button } from '@material-ui/core';
 import axios from 'axios';
+import {makeStyles, ThemeProvider, createMuiTheme} from '@material-ui/core';
+import { green, red} from '@material-ui/core/colors' 
+// import AppBar from '@material-ui/core/AppBar'
+// import Menu from '@material-ui/core/Menu'
+// import Toolbar from '@material-ui/core/ToolBar'
+// import IconButton from '@material-ui/core/IconButton'
+
+
 
 
 let idNumber = 0;
 let idLiteral = "chart_0"
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: green[500]
+    }
+  }
+});
 
 class App extends Component {
   //defaults:
@@ -25,7 +42,7 @@ class App extends Component {
       legendText:"Some lovely plot",
       legendPosition: "top",
       titleDisplay:true,
-      titleText:"My beautiful Chart",
+      titleText:"Testing",
       xAxisLabel:"",
       yAxisLabel:"",
       borderColor: {}
@@ -183,9 +200,17 @@ class App extends Component {
 
 
       render() {
-                  return (
-                    <div className="App" position="relative">
-        <h1>Let's work here you fucker</h1>
+          return (
+            <ThemeProvider theme={theme} >
+            {/* <AppBar>
+              <Toolbar>
+              <IconButton>
+                  <Menu />
+              </IconButton>
+              </Toolbar>
+            </AppBar> */}
+        <div className="App" position="relative">
+        <h1>Spectral Plotting</h1>
         <div className="chartDiv" position="absolute" align="center">
           <Chart
             {...this.state}
@@ -194,18 +219,22 @@ class App extends Component {
           />
         </div>
         <div>
-          <h2>Tools </h2>
+          <h3>Tools </h3>
           <Inputtag changer={this.titleChangedHandler} label="Title" ></Inputtag>
           <Inputtag changer={this.legendChangedHandler} label="Legend" ></Inputtag>
           <Inputtag changer={this.xAxisChangedHandler} label="X-Axis" ></Inputtag>
           <Inputtag changer={this.yAxisChangedHandler} label="Y-Axis" ></Inputtag>
-          <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.readInputFile}></input>
-
-          <CustomButton changer = {this.receiveChange} > Linear Gradient</CustomButton>
-
+          {/* <input type="file" id="fileSelector" accept=".txt, .csv" onChange={this.readInputFile}></input> */}
+          {/* <ButtonGroup variant = "contained" color ="primary">
+          <CustomButton changer = {this.receiveChange} value = "Gradient"> </CustomButton>
+          <CustomButton changer = {this.receiveChange} value = "Smooth"> </CustomButton>
+          <CustomButton changer = {this.receiveChange} value = "Maximum"> </CustomButton>
+          </ButtonGroup> */}
+        
         </div>
 
       </div>
+      </ThemeProvider>
     );
   };
 

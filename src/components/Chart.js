@@ -176,7 +176,7 @@ const Chart = (
 
     
     return (
-        <div style = {{ postion: "absolute", width : "770px", height : "400px" }} className ="chart" >
+        <div style = {{ postion: "absolute", width : "800px", height : "450px" }} className ="chart" >
             <Line
                 ref={this.chartReference}
                 data = {chartData}
