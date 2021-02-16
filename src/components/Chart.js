@@ -17,7 +17,8 @@ const Chart = (
     xAxisLabel ,
     yAxisLabel,
     borderColor , 
-    }, receiveChange
+    receiveChange
+    },
 
     ) => {
         // console.log("Signal: ", receiveChange)
@@ -33,7 +34,7 @@ const Chart = (
                 display: legendDisplay,
                 text: legendText,
                 position: legendPosition,
-                // onClick: handleLegendClick
+                onClick: handleLegendClick
             },
             scales: {
                 xAxes: [{
@@ -112,24 +113,24 @@ const Chart = (
         return output;
     } 
 
-    // function handleLegendClick(e, legendItem, legend){
-    //    let identifier =  getKeyByValue(datasetLabels, legendItem.text)
+    function handleLegendClick(e, legendItem, legend){
+       let identifier =  getKeyByValue(datasetLabels, legendItem.text)
 
-    //    receiveChange("bordercolor", "black", identifier)
+       receiveChange("fill", true, identifier)
+       console.log("Identgifier:", identifier)
 
-    // //    const result = chartData.datasets.find( ({ id }) => id === identifier );
-    // //    result.borderColor = "black"
-    // //    result.fill = true;
-    // //    result.label = "Selected"
+    //    const result = chartData.datasets.find( ({ id }) => id === identifier );
+    //    result.borderColor = "black"
+    //    result.fill = true;
+    //    result.label = "Selected"
+
+        // console.log("Dataset: " , chartData)
+
+       //Add to selection
+       //Change visuals acoordingly 
 
 
-    //     console.log("Dataset: " , chartData)
-
-    //    //Add to selection
-    //    //Change visuals acoordingly 
-
-
-    // }
+    }
 
     function handleLegendHover(){
 
@@ -176,7 +177,7 @@ const Chart = (
 
     
     return (
-        <div style = {{ postion: "absolute", width : "800px", height : "450px" }} className ="chart" >
+        <div style = {{ postion: "absolute", width : "1000px", height : "650px" }} className ="chart" >
             <Line
                 ref={this.chartReference}
                 data = {chartData}

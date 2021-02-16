@@ -97,6 +97,7 @@ class App extends Component {
     })
 
     console.log("Now state contains: ", this.state.datas)
+    console.log("The state is: ", this.state)
 
   }
 
@@ -161,9 +162,25 @@ class App extends Component {
 
   receivedChange = (property, value, id) => {
     console.log("Signal incoming")
-    this.setState({ 
-      [property[id]] : value
-    })
+    console.log("Property: ", property)
+    console.log("Value: ", value)
+    // this.setState({
+    //   [property] : value
+      
+    // })
+
+
+    this.setState(prevState => ({
+      
+      // update your 'list' property
+      [property]: {
+        // spread old values into this object so you don't lose any data
+        ...prevState.property,
+        // update this field's value
+        [id]: value
+      }
+  }))
+    console.log("Updated?: " ,this.state)
   }
 
 
@@ -214,7 +231,8 @@ class App extends Component {
         <div className="chartDiv" position="absolute" align="center">
           <Chart
             {...this.state}
-            receiveChange = {this.receiveChange}
+            receiveChange = {this.receivedChange}
+            
 
           />
         </div>
