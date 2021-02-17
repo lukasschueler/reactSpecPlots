@@ -14,8 +14,8 @@ const CustomButton = (props) => {
     // style = {buttonStyle}>
     return  (
     <Button variant = "contained"  
-            color = "primary" 
-            size = "small" 
+            color = "secondary" 
+            size = "large" 
             value = {props.value}
             onClick = {props.changer}>
     </Button>

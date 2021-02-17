@@ -32,13 +32,8 @@ class Tools():
             
         return splittedArrayOfLines
     
-    def clean(self, data, windowSize, degree):
-        x = data[0]
-        y = data[1]
-
-        newY = savgol_filter(y, windowSize, degree)
-        result = [list(a) for a in zip(x, newY)]
-        return result
+    
+    
     
     def normalize(self, data, reference = None):
         numerator = np.array(data)
@@ -68,4 +63,30 @@ class Tools():
         
         return [min,max]
         
+    def unWrap(self, data):
+        x = []
+        y = []
+        for each in data:
+            x.append(each["x"])
+            y.append(each["y"])
+        return x,y
+    
+    def wrap(self, x, y):
+        output = []
+        
+        for X,Y in zip(x,y):
+            output.append({
+                "x":X, "y":Y
+            })
 
+        return output
+            
+    def cleanData(self, data, windowSize, degree):
+        x,y = Tools.unWrap(self,data)
+        print("x:" ,type(x))
+        print("y:" ,type(y))
+        
+        
+        newY = savgol_filter(y, windowSize, degree)
+        result = Tools.wrap(self,x,newY)
+        return result

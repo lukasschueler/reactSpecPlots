@@ -112,7 +112,7 @@ class Server(SimpleHTTPRequestHandler):
             windowSize = int(message["windowSize"])
             degree = int(message["degree"])
             
-            smoothedData = Tools.clean(self, data, windowSize, degree)
+            smoothedData = Tools.cleanData(self, data, windowSize, degree)
             output = json.dumps(smoothedData)
             self.wfile.write(output.encode())
             

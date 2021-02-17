@@ -6,7 +6,9 @@ import "chartjs-plugin-zoom"
 
 
 const Chart = (
-   {  datas,
+   {  
+       pointRadius,
+       datas,
         datasetLabels ,
         fill ,
         legendDisplay , 
@@ -17,7 +19,8 @@ const Chart = (
     xAxisLabel ,
     yAxisLabel,
     borderColor , 
-    receiveChange
+    receiveChange,
+    setActivity
     },
 
     ) => {
@@ -101,7 +104,7 @@ const Chart = (
                 data: datas[key],
                 label: datasetLabels[key],
                 fill: fill[key],
-                pointRadius: 0,
+                pointRadius: pointRadius[key],
                 borderColor: borderColor[key]
             }
             datasets.push(tmp)
@@ -113,16 +116,21 @@ const Chart = (
         return output;
     } 
 
+
     function handleLegendClick(e, legendItem, legend){
        let identifier =  getKeyByValue(datasetLabels, legendItem.text)
+       console.log("Identifier:", identifier)
+       setActivity(identifier)
 
-       receiveChange("fill", true, identifier)
-       console.log("Identgifier:", identifier)
+    //    receiveChange("pointRadius", 3, identifier)
 
     //    const result = chartData.datasets.find( ({ id }) => id === identifier );
+    //    console.log("Result: ", result)
     //    result.borderColor = "black"
     //    result.fill = true;
     //    result.label = "Selected"
+    //    console.log("Result22: ", result)
+
 
         // console.log("Dataset: " , chartData)
 
